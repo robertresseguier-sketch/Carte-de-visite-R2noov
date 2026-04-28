@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte de Visite R2noov - Robert Resseguier</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+
+        :root {
+            --primary-red: #D90429;
+            --white-card-bg: #f9f9f9;
+            --text-dark: #333333;
+            --white: #ffffff;
+            --background-body: #e0e0e0;
+            --card-shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background-body);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .card-container {
+            perspective: 2000px;
+        }
+
+        .business-card {
+            width: 650px;
+            height: 380px;
+            position: relative;
+            transition: transform 0.8s, box-shadow 0.4s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            box-shadow: 0 15px 40px var(--card-shadow);
+            border-radius: 12px;
+        }
+        
+        /* État pour le retournement */
+        .business-card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-container:hover .business-card:not(.is-flipped) {
+            box-shadow: 0 25px 60px var(--card-shadow);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            box-sizing: border-box;
+            display: flex;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        /* --- FACE AVANT --- */
+        .card-front {
+            background-color: var(--white-card-bg);
+            color: var(--text-dark);
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 30px;
+            z-index: 2;
+        }
+        
+        .top-section-front {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .logo-front {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-right: 20px;
+            white-space: nowrap;
+        }
+        .logo-front span {
+            color: var(--primary-red);
+        }
+
+        .slogan-front-top {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text-dark);
+            font-style: italic;
+            border-bottom: 2px solid var(--primary-red);
+            padding-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .contact-details-front {
+            flex-grow: 1;
+            text-align: right;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .name-front {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .contact-info-front {
+            list-style: none;
+            padding: 0;
+            font-size: 18px;
+            font-weight: 400;
+        }
+        .contact-info-front li {
+            margin-bottom: 5px;
+        }
+        .contact-info-front a {
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .red-band-bottom-front {
+            background-color: var(--primary-red);
+            width: calc(100% + 60px);
+            margin-left: -30px;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: -30px;
+        }
+        .red-band-bottom-front a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* --- FACE ARRIÈRE --- */
+        .card-back {
+            background-color: var(--white-card-bg);
+            color: var(--text-dark);
+            transform: rotateY(180deg);
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            padding-bottom: 0;
+        }
+        
+        .logo-back-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .logo-back {
+            font-size: 50px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+        .logo-back span {
+            color: var(--primary-red);
+        }
+
+        .services-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            line-height: 1.2;
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .services-list li {
+            margin: 0 10px;
+        }
+
+        .services-list .separator {
+            width: 2px;
+            height: 40px;
+            background-color: var(--primary-red);
+            margin: 0 15px;
+        }
+        
+        .red-band-bottom-back {
+            background-color: var(--primary-red);
+            width: calc(100% + 60px);
+            margin-left: -30px;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+        }
+        .red-band-bottom-back span {
+            color: var(--white);
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .business-card {
+                width: 90vw;
+                height: 55vw;
+                min-height: 280px;
+            }
+            .card-front, .card-back { padding: 20px; }
+            .logo-front { font-size: 28px; margin-right: 15px; }
+            .slogan-front-top { font-size: 14px; }
+            .name-front { font-size: 22px; }
+            .contact-info-front { font-size: 14px; }
+            .red-band-bottom-front { height: 60px; margin-left: -20px; width: calc(100% + 40px); }
+            .red-band-bottom-front a { font-size: 18px; }
+
+            .logo-back { font-size: 38px; margin-bottom: 15px; }
+            .services-list { font-size: 16px; flex-direction: column; }
+            .services-list li { margin: 5px 0; }
+            .services-list .separator { height: 2px; width: 40px; margin: 10px 0;}
+            .red-band-bottom-back { height: 60px; margin-left: -20px; width: calc(100% + 40px); }
+            .red-band-bottom-back span { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        <div class="business-card" onclick="this.classList.toggle('is-flipped')">
+            
+            <!-- FACE AVANT -->
+            <div class="card-face card-front">
+                <div class="top-section-front">
+                    <h1 class="logo-front"><span>R2</span>noov</h1>
+                    <p class="slogan-front-top">le "One Stop Shop" de la rénovation</p>
+                </div>
+                <div class="contact-details-front">
+                    <h3 class="name-front">Robert RESSEGUIER</h3>
+                    <ul class="contact-info-front">
+                        <li>06 37 05 16 81</li>
+                        <li><a href="mailto:robert.resseguier@r2noov.fr">robert.resseguier@r2noov.fr</a></li>
+                    </ul>
+                </div>
+                <div class="red-band-bottom-front">
+                    <a href="https://www.r2noov.fr" target="_blank">www.r2noov.fr</a>
+                </div>
+            </div>
+            
+            <!-- FACE ARRIÈRE -->
+            <div class="card-face card-back">
+                <div class="logo-back-section">
+                    <h2 class="logo-back"><span>R2</span>noov</h2>
+                    <ul class="services-list">
+                        <li>Entretien</li>
+                        <li class="separator"></li>
+                        <li>Rénovation</li>
+                        <li class="separator"></li>
+                        <li>Réhabilitation</li>
+                    </ul>
+                </div>
+                <div class="red-band-bottom-back">
+                    <span>VALORISEZ VOS BIENS IMMOBILIERS</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
